@@ -9,7 +9,8 @@
         :class="CurrentAccount && ChainId != 97 ? 'btn-warning' : ''"
         @click="
           () => {
-            connectWallet();
+            // connectWallet();
+            connectMetamask()
           }
         "
       >
@@ -144,28 +145,23 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("connectWallet", ["CurrentAccount"]),
-    ...mapGetters("connectWallet", ["ChainId"]),
+    ...mapGetters(["CurrentAccount"]),
+    ...mapGetters(["ChainId"]),
     ...mapGetters(["AllImages"]),
   },
   mounted() {
-    this.GetAllImages();
+    this.checkWalletIsConnected();
+    this.getAllImages();
   },
   methods: {
-    ...mapActions("connectWallet", ["checkWalletIsConnected"]),
-    ...mapActions("connectWallet", ["connect_wallet"]),
-    ...mapActions("connectWallet", ["chengNetwork"]),
+    ...mapActions(["checkWalletIsConnected"]),
+    ...mapActions(["connectMetamask"]),
     ...mapActions(["getAllImages"]),
-    ...mapActions(["DonateImageOwner"]),
     async handelFile(file) {
       const added = await client.add(file);
       this.ipfsHash = added[0].hash;
     },
-    async connectWallet() {
-      await this.connect_wallet();
-      await this.chengNetwork();
-      await this.checkWalletIsConnected();
-    },
+
     async creatImage() {
       try {
         if (this.CurrentAccount && this.ipfsHash && this.Description) {
